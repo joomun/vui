@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voice Assistance Service</title>
     <link rel="stylesheet" href="../css/styles_index.css">
-    <link rel="icon" type="image/png" href="../resources/">
+    <link rel="icon" type="image/png" href="../resources/logo_without.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
 </head>
@@ -15,9 +15,15 @@
     </header>
     <main>
         <p>Welcome to the Computer Science and Software Engineering Voice Assistance Service. Click below to start.</p>
-        <button id="start-voice">Activate Voice Assistance</button>
-        <!-- Placeholder for the voice input/output -->
-        <div id="voice-output"></div>
+        <button id="mic-button" onclick="toggleRecording()">
+            <i id="mic-icon" class="fas fa-microphone"></i>
+            <div id="wave" class="wave"></div>
+        </button>
+        <!-- Add this inside your main tag -->
+        <canvas id="audioWave" width="300" height="100"></canvas>
+
+        <div id="transcript">Transcript: <span id="transcript-text"></span></div>
+        
     </main>
     <footer>
         <p>&copy; All Rights Reserved to Noor Joomun</p>
