@@ -1,10 +1,16 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* This ensures padding doesn't affect overall width */
+}
+
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
     min-height: 100vh;
+    display: block; /* Let Bootstrap handle the flex layout */
 }
 
 header, footer {
@@ -12,22 +18,71 @@ header, footer {
     color: white;
     text-align: center;
     padding: 10px 0;
+    width: 100%; /* Ensure header and footer are full width */
 }
 
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    
+}
+
+/* Sidebar styles */
+nav {
+    background-image: url('../resources/campus.jpg'); /* Add your background image */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    color: white; /* Adjust text color for visibility */
+    padding: 1rem;
+    width: 200px; /* Fixed width for the sidebar */
+    flex-shrink: 0; /* Prevents the sidebar from shrinking */
+}
+.logo {
+    display: block; /* Makes the image a block element */
+    max-width: 100%; /* Ensures the image is not wider than the sidebar */
+    height: auto; /* Keeps the aspect ratio of the image */
+    margin: 0 auto 20px; /* Centers the image and adds some margin below */
+}
+
+#sidebar {
+    background-color: #f0f0f0; /* Light grey background */
+    min-height: 100vh; /* Full height */
+    padding: 20px; /* Padding around text */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow to the right of sidebar */
+}
+
+#sidebar h2 {
+    margin-top: 0; /* Remove default margin */
+}
+
+#sidebar ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margin */
+}
+
+#sidebar ul li a {
+    display: block; /* Make the links fill their container */
+    padding: 10px; /* Add some padding */
+    text-decoration: none; /* Remove underline from links */
+    color: black; /* Default text color for links */
+}
+
+#sidebar ul li a:hover {
+    background-color: #ddd; /* Light grey background on hover */
+}
+
+
+/* Main content styles */
 main {
-    flex: 1;
     padding: 20px;
-    display: flex;
-    flex-direction: column;
+    display: block; /* Default display for block elements */
     align-items: center;
     gap: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
+
 
 #voice-output {
     margin-top: 20px;
@@ -37,21 +92,7 @@ button {
     min-height: 50px;
 }
 
-.social-icons {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
-}
 
-.social-icons a {
-    color: white; /* Change color as needed */
-    padding: 0 10px;
-    font-size: 24px; /* Adjust size as needed */
-}
-
-.social-icons a:hover {
-    opacity: 0.7; /* Optional: add hover effect */
-}
 
 #mic-button {
     position: relative;
@@ -82,14 +123,24 @@ button {
     animation: none;
 }
 
+
+#audioWave {
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    display: block; /* Remove default inline display */
+    margin: 20px auto; /* Center it horizontally with margin */
+    width: 100%; /* Responsive width */
+    max-width: 300px; /* Maximum size */
+}
+
 /* Animation for the wave effect */
 @keyframes pulse {
     from {
-        transform: scale(1);
+        transform: scale(40);
         opacity: 0.8;
     }
     to {
-        transform: scale(1.5);
+        transform: scale(10);
         opacity: 0;
     }
 }
@@ -97,3 +148,98 @@ button {
 #transcript {
     margin-top: 20px;
 }
+
+
+
+.row {
+    display: flex;
+    flex-wrap: wrap; /* Allow the contents to wrap as needed */
+    align-items: center; /* Vertically center the contents of the row */
+    min-height: calc(100vh - 30vh); /* Adjust based on the actual height of your header/footer */
+}
+
+
+@media (max-width: 767px) {
+    .container-fluid {
+        flex-direction: column;
+    }
+
+    nav {
+        width: 100%; /* Full width sidebar on smaller screens */
+    }
+
+    main {
+        width: 100%; /* Full width main content on smaller screens */
+    }
+}
+
+.text-center-red {
+    color: red; /* Sets the text color to red */
+    text-align: center; /* Keeps the text centered */
+}
+
+
+.social-icons {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0;
+}
+
+.social-icons a {
+    color: white; /* Change color as needed */
+    padding: 0 10px;
+    font-size: 24px; /* Adjust size as needed */
+}
+
+.social-icons a:hover {
+    opacity: 0.7; /* Optional: add hover effect */
+}
+
+main.col-md-8 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 20px;
+    text-align: center;
+}
+
+#video-background {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    background-size: cover;
+}
+
+.btn {
+    font-size: 1.2rem;
+    padding: 1rem 2.5rem;
+    border: none;
+    outline: none;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    text-transform: uppercase;
+    background-color: rgb(14, 14, 26);
+    color: rgb(234, 234, 234);
+    font-weight: 700;
+    transition: 0.6s;
+    box-shadow: 0px 0px 60px #1f4c65;
+    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+  }
+  
+  .btn:active {
+    scale: 0.92;
+  }
+  
+  .btn:hover {
+    background: rgb(2,29,78);
+    background: linear-gradient(270deg, rgba(2, 29, 78, 0.681) 0%, rgba(31, 215, 232, 0.873) 60%);
+    color: rgb(4, 4, 38);
+  }
+  
