@@ -17,8 +17,8 @@
 
 
                 <img src="../resources/logo_without.png" alt="Logo" class="logo">
-                <button class="btn">
-                    NEW CHAT
+                <button class="btn ">
+                    <i class="fas fa-comments"></i> NEW CHAT
                 </button>
                 <ul>
                     <li><a href="#">Link 1</a></li>
@@ -30,19 +30,21 @@
     
             <!-- Main content -->
             <main class="col-md-8">
-                <video autoplay loop muted id="video-background">
-                    <source src="../resources/background.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <p>Welcome to the Computer Science and Software Engineering Voice Assistance Service. Click below to start.</p>
-                <button id="mic-button" onclick="toggleRecording()">
-                    <i id="mic-icon" class="fas fa-microphone"></i>
-                    <div id="wave" class="wave"></div>
-                </button>
-                <canvas id="audioWave" width="300" height="100"></canvas>
-                <div id="transcript">Transcript: <span id="transcript-text"></span></div>
 
-                
+
+                <div class="card" id="video-background">
+                </div>
+                <div class="voice-assist-container">
+                    <div class="voice-assist-footer">
+                        <span id="transcript-text">Hello.</span>
+                        <div class="mic-and-wave-container">
+                            <button id="mic-button" onclick="toggleRecording()">
+                                <i id="mic-icon" class="fas fa-microphone"></i>
+                            </button>
+                            <div id="wave" class="wave"></div>
+                            <canvas id="audioWave" width="150" height="15"></canvas>
+                        </div>
+                    </div>
             </main>
         </div>
     </div>
