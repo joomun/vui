@@ -1,6 +1,7 @@
 var recognition;
-var isStarted = false;
+var isRecording = false;
 var audioContext, analyser, microphone, dataArray;
+var transcript = '';
 
 function initAudioContext() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -20,20 +21,23 @@ function drawWave() {
     var width = canvas.width;
     var height = canvas.height;
 
-    ctx.fillStyle = "#f5f5f5";
-    ctx.fillRect(0, 0, width, height);
+    ctx.clearRect(0, 0, width, height);
 
+    // Set up the style for the waveform
     ctx.lineWidth = 2;
     ctx.strokeStyle = "rgb(34, 34, 34)";
 
+    // Begin the path for the waveform
     ctx.beginPath();
 
     var sliceWidth = width * 1.0 / analyser.fftSize;
     var x = 0;
 
+    // Loop through the data array and draw the waveform
     for (var i = 0; i < analyser.fftSize; i++) {
-        var v = dataArray[i] / 128.0;
-        var y = v * height / 2;
+        // Normalize the data to [-1, 1] and scale it to the canvas height
+        var v = (dataArray[i] / 128.0) - 1;
+        var y = (v * height / 0.5) + (height / 4); // Adjust the height / 4 to increase amplitude
 
         if (i === 0) {
             ctx.moveTo(x, y);
@@ -44,28 +48,41 @@ function drawWave() {
         x += sliceWidth;
     }
 
-    ctx.lineTo(canvas.width, canvas.height / 2);
+    // Draw the waveform to the canvas
+    ctx.lineTo(width, height / 2);
     ctx.stroke();
 }
 
+
+
 function toggleRecording() {
-    if (isStarted) {
-        recognition.stop();
-        // Disconnect the microphone from the analyser when not recording
-        microphone.disconnect();
-        analyser.disconnect();
+    if (!isRecording) {
+        startRecording();
     } else {
-        navigator.mediaDevices.getUserMedia({ audio: true })
-            .then(function(stream) {
-                microphone = audioContext.createMediaStreamSource(stream);
-                microphone.connect(analyser);
-                drawWave();
-                recognition.start();
-            }).catch(function(err) {
-                console.log('Error occurred when trying to get microphone input: ' + err);
-                alert('Could not access the microphone. Error: ' + err);
-            });
+        stopRecording();
     }
+}
+
+function startRecording() {
+    transcript = ''; // Reset transcript
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+            microphone = audioContext.createMediaStreamSource(stream);
+            microphone.connect(analyser);
+            drawWave();
+            recognition.start();
+        }).catch(function(err) {
+            console.log('Error occurred when trying to get microphone input: ' + err);
+            alert('Could not access the microphone. Error: ' + err);
+        });
+}
+
+
+function stopRecording() {
+    recognition.stop();
+    // Disconnect the microphone from the analyser when not recording
+    microphone.disconnect();
+    analyser.disconnect();
 }
 
 function initSpeechRecognition() {
@@ -76,21 +93,31 @@ function initSpeechRecognition() {
         recognition.lang = 'en-US';
 
         recognition.onstart = function() {
-            isStarted = true;
+            isRecording = true;
             document.getElementById('mic-icon').classList.add('recording');
             document.getElementById('wave').style.display = 'block'; // Show the canvas when recording
         };
 
         recognition.onresult = function(event) {
-            var transcript = '';
+            var interimTranscript = '';
+            for (var i = event.resultIndex; i < event.results.length; ++i) {
+                if (event.results[i].isFinal) {
+                    transcript += event.results[i][0].transcript;
+                    showChatBubble(event.results[i][0].transcript);
+                } else {
+                    interimTranscript += event.results[i][0].transcript;
+                }
+            }
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 transcript += event.results[i][0].transcript;
             }
             document.getElementById('transcript-text').textContent = transcript;
+            // Update the interim result
+            updateInterimBubble(interimTranscript);
         };
 
         recognition.onend = function() {
-            isStarted = false;
+            isRecording = false;
             document.getElementById('mic-icon').classList.remove('recording');
             document.getElementById('wave').style.display = 'none'; // Hide the canvas when not recording
         };
@@ -107,3 +134,52 @@ window.onload = function() {
 };
 
 
+
+function showChatBubble(transcript) {
+    var chatBubbleContainer = document.getElementById('chat-bubble-container');
+    var chatBubble = document.createElement('div');
+    chatBubble.classList.add('chat-bubble');
+
+    chatBubble.innerHTML = `
+        <span class="bubble-transcript">${transcript}</span>
+        <i class="fas fa-user user-icon"></i> <!-- User icon -->
+    `;
+    
+    // Append the new chat bubble to the start of the container
+    chatBubbleContainer.prepend(chatBubble);
+    chatBubbleContainer.scrollTop = chatBubbleContainer.scrollHeight; // Scroll to the bottom
+}
+
+
+function showChatBubble(transcript) {
+    var chatBubbleContainer = document.getElementById('chat-bubble-container');
+    var chatBubble = document.createElement('div');
+    var userIconContainer = document.createElement('div');
+    var textContainer = document.createElement('div');
+
+    chatBubble.classList.add('chat-bubble');
+    userIconContainer.classList.add('user-icon-container');
+    textContainer.classList.add('text-container');
+
+    // Check if a previous interim bubble exists and remove it
+    var interimBubble = document.getElementById('interim-bubble');
+    if (interimBubble) {
+        interimBubble.remove();
+    }
+
+    userIconContainer.innerHTML = `<i class="fas fa-user user-icon"></i>`; // User icon
+    textContainer.innerHTML = `<span class="bubble-transcript">${transcript}</span>`; // Transcript text
+
+    // Append the user icon container and text container to the chat bubble
+    chatBubble.appendChild(textContainer);
+    chatBubble.appendChild(userIconContainer);
+    chatBubbleContainer.appendChild(chatBubble);
+
+    chatBubble.scrollIntoView({ behavior: 'smooth' }); // Scroll into view if needed
+}
+
+
+
+window.onload = function() {
+    initSpeechRecognition();
+};

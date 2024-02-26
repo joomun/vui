@@ -19,6 +19,7 @@ header, footer {
     text-align: center;
     padding: 10px 0;
     width: 100%; /* Ensure header and footer are full width */
+
 }
 
 .container-fluid {
@@ -46,6 +47,7 @@ nav {
 }
 
 #sidebar {
+    
     background-color: #f0f0f0; /* Light grey background */
     min-height: 100vh; /* Full height */
     padding: 20px; /* Padding around text */
@@ -136,12 +138,13 @@ main {
     margin: 20px auto; /* Center it horizontally with margin */
     width: 100%; /* Responsive width */
     max-width: 300px; /* Maximum size */
+    background-color: transparent
+    color(srgb rgb(0, 0, 0) rgb(0, 255, 0) blue)  ;
 }
 
 /* Animation for the wave effect */
 @keyframes pulse {
     from {
-        transform: scale(40);
         opacity: 0.8;
     }
     to {
@@ -258,10 +261,10 @@ main.col-md-8 {
   
 
   .card {
-    width: 190px;
-    height: 254px;
+    width: 89%;
+    height: 100%;
     background: #ffffff;
-    position: relative;
+    position: fixed; /* Fixed position */
     display: flex;
     place-content: center;
     place-items: center;
@@ -280,7 +283,7 @@ main.col-md-8 {
     position: absolute;
     width: 100px;
     background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    height: 130%;
+    height: 250%;
     animation: rotBGimg 3s linear infinite;
     transition: all 0.2s linear;
   }
@@ -299,7 +302,6 @@ main.col-md-8 {
     content: '';
     position: absolute;
     background: #ffffff;
-    ;
     inset: 5px;
     border-radius: 15px;
   }  
@@ -335,8 +337,54 @@ main.col-md-8 {
 }
 
 .transcript-container {
-    white-space: nowrap; /* Prevent text from wrapping to the next line */
+    white-space: nowrap; /* Ensure the text stays on a single line */
     overflow-x: auto; /* Allow horizontal scrolling */
-    margin-right: 10px; /* Add some space between the text and the microphone icon */
+
+    margin-right: 40px; /* Add some space between the text and the microphone icon */
     padding: 0 5px; /* Optional: Padding inside the container */
+    max-width: 100%; /* Ensure it doesn't overflow the parent container */
+}
+
+.chat-bubble-container {
+    width: 100%;
+    position: absolute; /* or 'fixed' depending on your layout needs */
+    bottom: 10%; /* Adjust this to position the container above the voice-assist-container */
+    left: 0;
+    padding: 10px;
+    display: flex;
+    margin-left: -5%; /* Add some space from the left edge */
+    margin-right: 5%;
+    margin-bottom: 2%;
+    flex-direction: column; /* Latest messages appear at the bottom */
+    align-items: flex-end; /* Align chat bubbles to the right */
+    background-color: transparent; /* or any color you prefer */
+    z-index: 10; /* Ensure it's above other elements */
+}
+
+/* Individual chat bubble styles */
+.chat-bubble {
+    background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
+    border-radius: 15px;
+    padding: 10px 20px;
+    margin: 5px 0;
+    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between; /* Space out the text and icon */
+}
+
+.user-icon-container {
+    margin-bottom: 5px; /* Space between icon and text */
+    align-self: flex-end;
+}
+
+
+
+/* User icon styles */
+.user-icon {
+    /* Your existing styles */
+    margin-top: 15%;
+    font-size: 18px; /* Adjust size as needed */
+    color:#000000; /* Color of your icon */
 }
