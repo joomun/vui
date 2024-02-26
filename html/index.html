@@ -36,13 +36,16 @@
                 </div>
                 <div class="voice-assist-container">
                     <div class="voice-assist-footer">
-                        <span id="transcript-text">Hello.</span>
+                        <div class="transcript-container">
+                            <span id="transcript-text">Hello. How can I help you with a very long text that needs to be scrollable...</span>
+                        </div>
                         <div class="mic-and-wave-container">
+                            <div id="wave" class="wave"></div>
+                            <canvas id="audioWave" width="150" height="15"></canvas>
                             <button id="mic-button" onclick="toggleRecording()">
                                 <i id="mic-icon" class="fas fa-microphone"></i>
                             </button>
-                            <div id="wave" class="wave"></div>
-                            <canvas id="audioWave" width="150" height="15"></canvas>
+
                         </div>
                     </div>
             </main>
