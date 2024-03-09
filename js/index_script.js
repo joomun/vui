@@ -85,6 +85,24 @@ function stopRecording() {
     analyser.disconnect();
 }
 
+
+function sendTranscriptToServer(transcript) {
+    fetch('/api/send_transcript', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ transcript: transcript }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        showChatBubble(data.reply,'bot'); // Show the custom response in the chat bubble
+    })
+    .catch((error) => {
+        console.error('API call error:', error);
+    });
+}
+
 function initSpeechRecognition() {
     if (window.webkitSpeechRecognition) {
         recognition = new webkitSpeechRecognition();
@@ -103,7 +121,8 @@ function initSpeechRecognition() {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     transcript += event.results[i][0].transcript;
-                    showChatBubble(event.results[i][0].transcript);
+                    showChatBubble(event.results[i][0].transcript,'user');
+                    sendTranscriptToServer(event.results[i][0].transcript);
                 } else {
                     interimTranscript += event.results[i][0].transcript;
                 }
@@ -111,9 +130,8 @@ function initSpeechRecognition() {
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 transcript += event.results[i][0].transcript;
             }
-            document.getElementById('transcript-text').textContent = transcript;
-            // Update the interim result
-            updateInterimBubble(interimTranscript);
+            document.getElementById('transcript-text').textContent = interimTranscript;
+
         };
 
         recognition.onend = function() {
@@ -135,48 +153,23 @@ window.onload = function() {
 
 
 
-function showChatBubble(transcript) {
+
+
+
+function showChatBubble(message, sender) {
     var chatBubbleContainer = document.getElementById('chat-bubble-container');
     var chatBubble = document.createElement('div');
     chatBubble.classList.add('chat-bubble');
-
-    chatBubble.innerHTML = `
-        <span class="bubble-transcript">${transcript}</span>
-        <i class="fas fa-user user-icon"></i> <!-- User icon -->
-    `;
-    
-    // Append the new chat bubble to the start of the container
-    chatBubbleContainer.prepend(chatBubble);
-    chatBubbleContainer.scrollTop = chatBubbleContainer.scrollHeight; // Scroll to the bottom
-}
-
-
-function showChatBubble(transcript) {
-    var chatBubbleContainer = document.getElementById('chat-bubble-container');
-    var chatBubble = document.createElement('div');
-    var userIconContainer = document.createElement('div');
-    var textContainer = document.createElement('div');
-
-    chatBubble.classList.add('chat-bubble');
-    userIconContainer.classList.add('user-icon-container');
-    textContainer.classList.add('text-container');
-
-    // Check if a previous interim bubble exists and remove it
-    var interimBubble = document.getElementById('interim-bubble');
-    if (interimBubble) {
-        interimBubble.remove();
+    if (sender === 'user') {
+        chatBubble.classList.add('user');
+    } else if (sender === 'bot') {
+        chatBubble.classList.add('bot');
     }
-
-    userIconContainer.innerHTML = `<i class="fas fa-user user-icon"></i>`; // User icon
-    textContainer.innerHTML = `<span class="bubble-transcript">${transcript}</span>`; // Transcript text
-
-    // Append the user icon container and text container to the chat bubble
-    chatBubble.appendChild(textContainer);
-    chatBubble.appendChild(userIconContainer);
+    chatBubble.textContent = message;
     chatBubbleContainer.appendChild(chatBubble);
-
-    chatBubble.scrollIntoView({ behavior: 'smooth' }); // Scroll into view if needed
+    chatBubble.scrollIntoView({ behavior: 'smooth' });
 }
+
 
 
 

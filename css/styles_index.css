@@ -30,7 +30,7 @@ header, footer {
 
 /* Sidebar styles */
 nav {
-    background-image: url('../resources/campus.jpg'); /* Add your background image */
+    background-image: url('/resources/campus.jpg'); /* Add your background image */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -363,7 +363,7 @@ main.col-md-8 {
 
 /* Individual chat bubble styles */
 .chat-bubble {
-    background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
+
     border-radius: 15px;
     padding: 10px 20px;
     margin: 5px 0;
@@ -387,4 +387,29 @@ main.col-md-8 {
     margin-top: 15%;
     font-size: 18px; /* Adjust size as needed */
     color:#000000; /* Color of your icon */
+}
+
+/* User messages */
+.chat-bubble.user {
+    align-self: flex-end; /* Align to the right */
+    background: linear-gradient(to right, #0e36dd, #9738fd, #000000);
+    border-radius: 15px;
+    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between; /* Space out the text and icon */
+}
+
+/* Bot messages */
+.chat-bubble.bot {
+    align-self: flex-start;
+    margin-left: 22.5%;
+    background: linear-gradient(to right, #000000, #9738fd, #0e36dd);
+    border-radius: 15px;
+    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    color: white;
+    justify-content: space-between; /* Space out the text and icon */
 }
