@@ -359,7 +359,10 @@ main.col-md-8 {
     align-items: flex-end; /* Align chat bubbles to the right */
     background-color: transparent; /* or any color you prefer */
     z-index: 10; /* Ensure it's above other elements */
+    overflow-y: auto; /* Makes the container scrollable vertically */
+    max-height: 80%; /* Adjust this value based on your layout needs */
 }
+
 
 /* Individual chat bubble styles */
 .chat-bubble {

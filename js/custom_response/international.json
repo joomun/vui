@@ -1,0 +1,107 @@
+{
+    "InternationalFees": [
+      {
+        "Program": "IFP (International Foundation Programme)",
+        "TuitionFees": "£3,600",
+        "AdminFees": "£400",
+        "FullPayment": "£4,000",
+        "InstallmentNonRefundableDeposit": "£2,200",
+        "Installment": [
+          "£900",
+          "£900"
+        ]
+      },
+      {
+        "Program": "BA Business Management",
+        "TuitionFees": "£5,400",
+        "AdminFees": "£400",
+        "FullPayment": "£5,800",
+        "InstallmentNonRefundableDeposit": "£2,800",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+      {
+        "Program": "BSc Psychology with Counseluling Skills",
+        "TuitionFees": "£5,400",
+        "AdminFees": "£400",
+        "FullPayment": "£5,800",
+        "InstallmentNonRefundableDeposit": "£2,800",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+
+      {
+        "Program": "BA Accounting & Finance",
+        "TuitionFees": "£5,400",
+        "AdminFees": "£400",
+        "FullPayment": "£5,800",
+        "InstallmentNonRefundableDeposit": "£2,800",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+
+      {
+        "Program": "BA Advertising PR & Branding",
+        "TuitionFees": "£6,000",
+        "AdminFees": "£400",
+        "FullPayment": "£6,400",
+        "InstallmentNonRefundableDeposit": "£3,400",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+      {
+        "Program": "Computing Programmes",
+        "TuitionFees": "£6,000",
+        "AdminFees": "£400",
+        "FullPayment": "£6,400",
+        "InstallmentNonRefundableDeposit": "£3,400",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+      {
+        "Program": "Law Programmes",
+        "TuitionFees": "£6,000",
+        "AdminFees": "£400",
+        "FullPayment": "£6,400",
+        "InstallmentNonRefundableDeposit": "£3,400",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+      {
+        "Program": "Advanced Entry and Top-Up Programmes",
+        "TuitionFees": "£6,000",
+        "AdminFees": "£400",
+        "FullPayment": "£6,400",
+        "InstallmentNonRefundableDeposit": "£3,400",
+        "Installment": [
+          "£1,500",
+          "£1,500"
+        ]
+      },
+      {
+        "Program": "Postgraduate",
+        "TuitionFees": "£7,020",
+        "AdminFees": "£400",
+        "FullPayment": "£7,420",
+        "InstallmentNonRefundableDeposit": "£3,820",
+        "Installment": [
+          "£1,800",
+          "£1,800"
+        ]
+      }
+
+    ]
+  }
+  

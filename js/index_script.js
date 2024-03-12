@@ -57,11 +57,13 @@ function drawWave() {
 
 function toggleRecording() {
     if (!isRecording) {
+        transcript = ''; // Reset transcript only when starting a new recording
         startRecording();
     } else {
         stopRecording();
     }
 }
+
 
 function startRecording() {
     transcript = ''; // Reset transcript
