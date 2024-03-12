@@ -1,0 +1,38 @@
+[
+  {
+      "LocationName": "Archway",
+      "Coordinates": {"lat": -20.280553, "lng": 57.395167}
+  },
+  {
+      "LocationName": "Admin Building",
+      "Coordinates": {"lat": -20.280553, "lng": 57.395167}
+  },
+  {
+      "LocationName": "Entrance",
+      "Coordinates": {"lat": -20.280309, "lng": 57.395255}
+  },
+  {
+      "LocationName": "Library",
+      "Coordinates": {"lat": -20.280528, "lng": 57.394936}
+  },
+  {
+      "LocationName": "Print Pod",
+      "Coordinates": {"lat": -20.280528, "lng": 57.394936}
+  },
+  {
+      "LocationName": "IT Support",
+      "Coordinates": {"lat": -20.280791, "lng": 57.395543}
+  },
+  {
+      "LocationName": "Robotic Labs",
+      "Coordinates": {"lat": -20.280829, "lng": 57.395387}
+  },
+  {
+      "LocationName": "Lecture Theatres",
+      "Coordinates": {"lat": -20.280790, "lng": 57.395270}
+  },
+  {
+      "LocationName": "Employability Service",
+      "Coordinates": {"lat": -20.280465, "lng": 57.395583}
+  }
+]

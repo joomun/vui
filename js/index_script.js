@@ -98,12 +98,25 @@ function sendTranscriptToServer(transcript) {
     })
     .then(response => response.json())
     .then(data => {
-        showChatBubble(data.reply,'bot'); // Show the custom response in the chat bubble
+        if (data.success && data.location) {
+            // Correctly wait for Google Maps API to be ready before showing the map
+            initializeGoogleMapsAPI().then(() => {
+                const destinationCoords = {lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng};
+                initMapModal(destinationCoords);
+            });
+        } else if (data.success) {
+            showChatBubble(data.reply, 'bot'); // Continue this for non-location responses
+        } else {
+            showChatBubble(data.message, 'bot'); // Error message or location not found
+        }
     })
     .catch((error) => {
         console.error('API call error:', error);
+        showChatBubble('There was an error processing your request.', 'bot');
     });
 }
+
+
 
 function initSpeechRecognition() {
     if (window.webkitSpeechRecognition) {
@@ -153,11 +166,6 @@ window.onload = function() {
     initSpeechRecognition();
 };
 
-
-
-
-
-
 function showChatBubble(message, sender) {
     var chatBubbleContainer = document.getElementById('chat-bubble-container');
     var chatBubble = document.createElement('div');
@@ -172,6 +180,134 @@ function showChatBubble(message, sender) {
     chatBubble.scrollIntoView({ behavior: 'smooth' });
 }
 
+function fetchGoogleMapsApiKey() {
+    return     fetch('/api/maps-api-key', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    
+        .then(response => {
+            if (!response.ok) {
+                // It's good practice to include the status in the error for more context
+                throw new Error(`Network response was not ok, status was: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data.mapapiKey) {
+                // Handle the case where the API key is undefined or not sent properly
+                throw new Error('API key was not found in the response');
+            }
+            return data.mapapiKey;
+        })
+        .catch(error => {
+            console.error("Failed to fetch Google Maps API key:", error);
+            // You might want to handle this error in the UI by showing a message to the user
+            // For instance, by returning a promise rejection with the error message
+            return Promise.reject(error.message);
+        });
+}
+
+
+
+function initMapModal(destinationCoords) {
+    // Display the modal
+    document.getElementById('mapModal').style.display = 'block';
+
+    // Initialize the map
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 14,
+        center: destinationCoords // This will be updated once directions are loaded
+    });
+
+    var directionsService = new google.maps.DirectionsService();
+    var directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
+    // Close modal handler
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('mapModal').style.display = 'none';
+    };
+
+    // Check if Geolocation is supported
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            var userLocation = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            };
+
+            // Calculate and display the route
+            calculateAndDisplayRoute(directionsService, directionsRenderer, userLocation, destinationCoords);
+        }, function() {
+            handleLocationError(true, map.getCenter());
+        });
+    } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, map.getCenter());
+    }
+}
+
+function calculateAndDisplayRoute(directionsService, directionsRenderer, start, end) {
+    directionsService.route({
+        origin: start,
+        destination: end,
+        // Consider allowing the user to select the mode
+        travelMode: google.maps.TravelMode.DRIVING,
+    }, function(response, status) {
+        if (status === google.maps.DirectionsStatus.OK) {
+            directionsRenderer.setDirections(response);
+        } else {
+            window.alert('Directions request failed due to ' + status);
+        }
+    });
+}
+
+function handleLocationError(browserHasGeolocation, pos) {
+    console.error(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+    // Consider providing further instructions to the user or a fallback
+}
+
+
+function initializeGoogleMapsAPI() {
+    return new Promise((resolve, reject) => {
+        if (window.google && window.google.maps) {
+            resolve();
+            return;
+        }
+        
+        fetchGoogleMapsApiKey().then(apiKey => {
+            if (!apiKey) {
+                reject('No API key received.');
+                return;
+            }
+            loadGoogleMapsScript(apiKey).then(resolve).catch(reject);
+        });
+    });
+}
+
+function loadGoogleMapsScript(apiKey) {
+    if (window.google && window.google.maps) {
+        return Promise.resolve();
+    }
+
+    return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}`;
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+
+        script.onload = resolve;
+        script.onerror = () => {
+            reject(new Error('Failed to load Google Maps script.'));
+        };
+    });
+}
 
 
 

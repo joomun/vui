@@ -2,6 +2,7 @@ require('dotenv').config();
 const { OpenAI } = require('openai');
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
+const mapapiKey = process.env.GOOGLE_MAPS_API_KEY;
 
 const express = require('express');
 const app = express();
@@ -21,8 +22,23 @@ app.use(express.json());
 // Load the international fees data
 const internationalFeesData = require('./js/custom_response/international.json').InternationalFees;
 
-// Endpoint for processing transcripts
 
+// Load the international fees data
+const locationData = require('./js/custom_response/location.json');
+const { Console } = require('console');
+
+
+// Example Express route to provide the API key to the frontend
+app.get('/api/maps-api-key', (req, res) => {
+    try {
+        console.log('Request received for Google Maps API key');
+        console.log('Sending Google Maps API key to frontend', process.env.GOOGLE_MAPS_API_KEY);
+        res.json({ mapapiKey: process.env.GOOGLE_MAPS_API_KEY });
+    } catch (error) {
+        console.error('Error handling request for Google Maps API key:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 app.post('/api/send_transcript', async (req, res) => {
     const userTranscript = req.body.transcript;
@@ -41,7 +57,8 @@ app.post('/api/send_transcript', async (req, res) => {
             } else {
                 res.json({ success: false, message: "I'm sorry, I couldn't find the fees for that program." });
             }
-        } else {
+        }  
+        else {
             try {
                 const chatCompletion = await openai.chat.completions.create({
                     model: 'gpt-3.5-turbo',
@@ -84,7 +101,25 @@ app.post('/api/send_transcript', async (req, res) => {
                 res.status(500).json({ success: false, error: 'Error with OpenAI API' });
             }
         }
-    } else {
+    }else if (isAskingAboutAvailableCourses(userTranscript)) {
+        const reply = listAvailableCourses(internationalFeesData);
+        res.json({ success: true, reply });
+    }
+    // Inside your app.post('/api/send_transcript', async (req, res) => { ...
+
+    else if (isAskingAboutSpecificLocation(userTranscript)) {
+        const locationInfo = getLocationFromTranscript(userTranscript);
+        if (locationInfo) {
+            // Respond with location data
+            console.log(locationInfo)
+            res.json({ success: true, location: locationInfo });
+        } else {
+            res.json({ success: false, message: "I'm sorry, I couldn't find information for that location." });
+        }
+    }
+
+    
+    else {
         try {
             const chatCompletion = await openai.chat.completions.create({
                 model: 'gpt-3.5-turbo',
@@ -135,6 +170,18 @@ function isAskingAboutInternationalFees(transcript) {
     return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 
+function isAskingAboutAvailableCourses(transcript) {
+    // Simple keyword check
+    const keywords = ['available courses', 'offered programs', 'what courses', 'what programs', 'list of courses', 'list of programs'];
+    return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
+}
+
+function listAvailableCourses(feesData) {
+    // Assuming feesData is an array of course objects
+    const courseList = feesData.map(course => course.Program).join(', ');
+    return `The available courses are: ${courseList}.`;
+}
+
 function getProgramNameFromTranscript(transcript, feesData) {
     // Log to verify the data is loaded correctly
     console.log(feesData);
@@ -167,7 +214,6 @@ function getProgramNameFromTranscript(transcript, feesData) {
     }
 }
 
-
 function createTuitionFeesResponse(feesInfo) {
     // Create a human-readable response message with the fees information
     return `The tuition fee for the ${feesInfo.Program} program is ${feesInfo.TuitionFees}, ` +
@@ -176,13 +222,28 @@ function createTuitionFeesResponse(feesInfo) {
            `followed by installments of ${feesInfo.Installment.join(' and ')}.`;
 }
 
+
+function isAskingAboutSpecificLocation(transcript) {
+    return locationData.some(location => transcript.toLowerCase().includes(location.LocationName.toLowerCase()));
+}
+
+function getLocationFromTranscript(transcript) {
+    return locationData.find(location => transcript.toLowerCase().includes(location.LocationName.toLowerCase()));
+}
+
 // Catch-all handler for any other GET request, not handled by static files
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'html/index.html'));
 });
+
+
+
+
 
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+
