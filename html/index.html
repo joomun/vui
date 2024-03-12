@@ -10,13 +10,14 @@
 </head>
 <body>
 
-    <div id="mapModal" style="display: none; position: fixed; z-index: 100; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; border: 2px solid #ccc; border-radius: 5px; overflow: hidden; transition: opacity 0.3s ease;">
-        <div style="padding: 10px; border-bottom: 2px solid #ccc;">
-            <span id="closeModal" style="cursor: pointer; float: right;">&times;</span>
+    <div id="mapModal" style="display:none; position:fixed; z-index:100; top:50%; left:50%; transform: translate(-50%, -50%); width:85%; height:85%; background-color:white; border:2px solid #ccc; border-radius:5px; overflow:hidden;">
+        <div style="padding:10px; border-bottom:2px solid #ccc;">
+            <span id="closeModal" style="cursor:pointer; float:right;">&times;</span>
             <h4>Directions</h4>
         </div>
-        <div id="map" style="height: 100%;"></div>
+        <div id="map" style="height: calc(100% - 40px);"></div>
     </div>
+    
     
     <div class="container-fluid">
         <div class="row">

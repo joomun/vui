@@ -98,14 +98,21 @@ function sendTranscriptToServer(transcript) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success && data.location) {
-            // Correctly wait for Google Maps API to be ready before showing the map
-            initializeGoogleMapsAPI().then(() => {
-                const destinationCoords = {lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng};
-                initMapModal(destinationCoords);
-            });
-        } else if (data.success) {
-            showChatBubble(data.reply, 'bot'); // Continue this for non-location responses
+        if (data.success) {
+            if (data.virtualTourUrl) {
+                window.open(data.virtualTourUrl, '_blank');
+            } else if (data.location) {
+                initializeGoogleMapsAPI().then(() => {
+                    const destinationCoords = {lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng};
+                    initMapModal(destinationCoords);
+                });
+            } else {
+                if (data.reply && data.reply.trim() !== '') {
+                    // Speak the bot's response
+                    speak(data.reply);
+                }
+                showChatBubble(data.reply, 'bot'); // Continue this for non-location responses
+            }
         } else {
             showChatBubble(data.message, 'bot'); // Error message or location not found
         }
@@ -115,6 +122,24 @@ function sendTranscriptToServer(transcript) {
         showChatBubble('There was an error processing your request.', 'bot');
     });
 }
+
+function speak(message, voiceName) {
+    const utterance = new SpeechSynthesisUtterance(message);
+
+    // Get a list of all available voices
+    const voices = window.speechSynthesis.getVoices();
+
+    // Find the voice with the specified name
+    const selectedVoice = voices.find(voice => voice.name === voiceName);
+
+    // Set the selected voice for the utterance
+    utterance.voice = selectedVoice;
+
+    // Speak the message
+    speechSynthesis.speak(utterance);
+}
+
+
 
 
 

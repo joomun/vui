@@ -117,7 +117,12 @@ app.post('/api/send_transcript', async (req, res) => {
             res.json({ success: false, message: "I'm sorry, I couldn't find information for that location." });
         }
     }
-
+    else if (isAskingForVirtualTour(userTranscript)) {
+        res.json({ success: true, virtualTourUrl: 'https://app.lapentor.com/sphere/mdx-mru-virtual-tour' });
+    }
+    
+    
+    
     
     else {
         try {
@@ -238,6 +243,10 @@ app.get('*', (req, res) => {
 
 
 
+function isAskingForVirtualTour(transcript) {
+    const keywords = ['virtual tour'];
+    return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
+}
 
 
 // Start the server

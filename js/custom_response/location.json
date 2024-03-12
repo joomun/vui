@@ -24,8 +24,20 @@
       "Coordinates": {"lat": -20.280791, "lng": 57.395543}
   },
   {
-      "LocationName": "Robotic Labs",
+      "LocationName": "Robotic Lab",
       "Coordinates": {"lat": -20.280829, "lng": 57.395387}
+  },
+  {
+    "LocationName": "CG01",
+    "Coordinates": {"lat": -20.280829, "lng": 57.395387}
+  },
+  {
+    "LocationName": "CG02",
+    "Coordinates": {"lat": -20.280829, "lng": 57.395387}
+  },
+  {
+    "LocationName": "CG03",
+    "Coordinates": {"lat": -20.280829, "lng": 57.395387}
   },
   {
       "LocationName": "Lecture Theatres",
