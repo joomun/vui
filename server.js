@@ -50,14 +50,14 @@ app.post('/api/send_transcript', async (req, res) => {
         if (programName) {
             // Find the tuition fees for the specified program
             const programFees = internationalFeesData.find(p => p.Program.toLowerCase() === programName.toLowerCase());
-            
+
             if (programFees) {
                 const reply = createTuitionFeesResponse(programFees);
                 res.json({ success: true, reply });
             } else {
                 res.json({ success: false, message: "I'm sorry, I couldn't find the fees for that program." });
             }
-        }  
+        }
         else {
             try {
                 const chatCompletion = await openai.chat.completions.create({
@@ -73,13 +73,13 @@ app.post('/api/send_transcript', async (req, res) => {
                         }
                     ],
                 });
-        
+
                 console.log('OpenAI API response:', chatCompletion);
-        
+
                 // Validate if the necessary properties exist in the response
                 if (chatCompletion && chatCompletion.choices && chatCompletion.choices.length > 0 && chatCompletion.choices[0].hasOwnProperty('message')) {
                     const message = chatCompletion.choices[0].message; // Directly access the message object
-        
+
                     // Use the 'content' property instead of 'text'
                     if (message.hasOwnProperty('content')) {
                         const reply = message.content.trim();
@@ -101,7 +101,7 @@ app.post('/api/send_transcript', async (req, res) => {
                 res.status(500).json({ success: false, error: 'Error with OpenAI API' });
             }
         }
-    }else if (isAskingAboutAvailableCourses(userTranscript)) {
+    } else if (isAskingAboutAvailableCourses(userTranscript)) {
         const reply = listAvailableCourses(internationalFeesData);
         res.json({ success: true, reply });
     }
@@ -120,10 +120,10 @@ app.post('/api/send_transcript', async (req, res) => {
     else if (isAskingForVirtualTour(userTranscript)) {
         res.json({ success: true, virtualTourUrl: 'https://app.lapentor.com/sphere/mdx-mru-virtual-tour' });
     }
-    
-    
-    
-    
+
+
+
+
     else {
         try {
             const chatCompletion = await openai.chat.completions.create({
@@ -139,13 +139,13 @@ app.post('/api/send_transcript', async (req, res) => {
                     }
                 ],
             });
-    
+
             console.log('OpenAI API response:', chatCompletion);
-    
+
             // Validate if the necessary properties exist in the response
             if (chatCompletion && chatCompletion.choices && chatCompletion.choices.length > 0 && chatCompletion.choices[0].hasOwnProperty('message')) {
                 const message = chatCompletion.choices[0].message; // Directly access the message object
-    
+
                 // Use the 'content' property instead of 'text'
                 if (message.hasOwnProperty('content')) {
                     const reply = message.content.trim();
@@ -171,7 +171,7 @@ app.post('/api/send_transcript', async (req, res) => {
 
 function isAskingAboutInternationalFees(transcript) {
     // Simple keyword check
-    const keywords = ['international fees', 'tuition cost', 'price of', 'how much for','fees'];
+    const keywords = ['international fees', 'tuition cost', 'price of', 'how much for', 'fees'];
     return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 
@@ -203,7 +203,7 @@ function getProgramNameFromTranscript(transcript, feesData) {
         // Find the first program name that is included in the user's transcript
         // Here, we assume the transcript includes the full program name
         const foundProgramName = programNames.find(programName => transcript.toLowerCase().includes(programName));
-        
+
         // If a program name is found, return the original (case-sensitive) program name from feesData
         if (foundProgramName) {
             const foundProgram = feesData.find(p => p.Program.toLowerCase() === foundProgramName);
@@ -222,9 +222,9 @@ function getProgramNameFromTranscript(transcript, feesData) {
 function createTuitionFeesResponse(feesInfo) {
     // Create a human-readable response message with the fees information
     return `The tuition fee for the ${feesInfo.Program} program is ${feesInfo.TuitionFees}, ` +
-           `plus ${feesInfo.AdminFees} in admin fees. The full payment amount is ${feesInfo.FullPayment}, ` +
-           `with an installment plan option available requiring a non-refundable deposit of ${feesInfo.InstallmentNonRefundableDeposit} ` +
-           `followed by installments of ${feesInfo.Installment.join(' and ')}.`;
+        `plus ${feesInfo.AdminFees} in admin fees. The full payment amount is ${feesInfo.FullPayment}, ` +
+        `with an installment plan option available requiring a non-refundable deposit of ${feesInfo.InstallmentNonRefundableDeposit} ` +
+        `followed by installments of ${feesInfo.Installment.join(' and ')}.`;
 }
 
 

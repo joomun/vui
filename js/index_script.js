@@ -68,12 +68,12 @@ function toggleRecording() {
 function startRecording() {
     transcript = ''; // Reset transcript
     navigator.mediaDevices.getUserMedia({ audio: true })
-        .then(function(stream) {
+        .then(function (stream) {
             microphone = audioContext.createMediaStreamSource(stream);
             microphone.connect(analyser);
             drawWave();
             recognition.start();
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log('Error occurred when trying to get microphone input: ' + err);
             alert('Could not access the microphone. Error: ' + err);
         });
@@ -96,31 +96,31 @@ function sendTranscriptToServer(transcript) {
         },
         body: JSON.stringify({ transcript: transcript }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (data.virtualTourUrl) {
-                window.open(data.virtualTourUrl, '_blank');
-            } else if (data.location) {
-                initializeGoogleMapsAPI().then(() => {
-                    const destinationCoords = {lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng};
-                    initMapModal(destinationCoords);
-                });
-            } else {
-                if (data.reply && data.reply.trim() !== '') {
-                    // Speak the bot's response
-                    speak(data.reply);
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.virtualTourUrl) {
+                    window.open(data.virtualTourUrl, '_blank');
+                } else if (data.location) {
+                    initializeGoogleMapsAPI().then(() => {
+                        const destinationCoords = { lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng };
+                        initMapModal(destinationCoords);
+                    });
+                } else {
+                    if (data.reply && data.reply.trim() !== '') {
+                        // Speak the bot's response
+                        speak(data.reply);
+                    }
+                    showChatBubble(data.reply, 'bot'); // Continue this for non-location responses
                 }
-                showChatBubble(data.reply, 'bot'); // Continue this for non-location responses
+            } else {
+                showChatBubble(data.message, 'bot'); // Error message or location not found
             }
-        } else {
-            showChatBubble(data.message, 'bot'); // Error message or location not found
-        }
-    })
-    .catch((error) => {
-        console.error('API call error:', error);
-        showChatBubble('There was an error processing your request.', 'bot');
-    });
+        })
+        .catch((error) => {
+            console.error('API call error:', error);
+            showChatBubble('There was an error processing your request.', 'bot');
+        });
 }
 
 function speak(message, voiceName) {
@@ -150,18 +150,18 @@ function initSpeechRecognition() {
         recognition.interimResults = true;
         recognition.lang = 'en-US';
 
-        recognition.onstart = function() {
+        recognition.onstart = function () {
             isRecording = true;
             document.getElementById('mic-icon').classList.add('recording');
             document.getElementById('wave').style.display = 'block'; // Show the canvas when recording
         };
 
-        recognition.onresult = function(event) {
+        recognition.onresult = function (event) {
             var interimTranscript = '';
             for (var i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     transcript += event.results[i][0].transcript;
-                    showChatBubble(event.results[i][0].transcript,'user');
+                    showChatBubble(event.results[i][0].transcript, 'user');
                     sendTranscriptToServer(event.results[i][0].transcript);
                 } else {
                     interimTranscript += event.results[i][0].transcript;
@@ -174,7 +174,7 @@ function initSpeechRecognition() {
 
         };
 
-        recognition.onend = function() {
+        recognition.onend = function () {
             isRecording = false;
             document.getElementById('mic-icon').classList.remove('recording');
             document.getElementById('wave').style.display = 'none'; // Hide the canvas when not recording
@@ -187,7 +187,7 @@ function initSpeechRecognition() {
     }
 }
 
-window.onload = function() {
+window.onload = function () {
     initSpeechRecognition();
 };
 
@@ -206,13 +206,13 @@ function showChatBubble(message, sender) {
 }
 
 function fetchGoogleMapsApiKey() {
-    return     fetch('/api/maps-api-key', {
+    return fetch('/api/maps-api-key', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
     })
-    
+
         .then(response => {
             if (!response.ok) {
                 // It's good practice to include the status in the error for more context
@@ -252,13 +252,13 @@ function initMapModal(destinationCoords) {
     directionsRenderer.setMap(map);
 
     // Close modal handler
-    document.getElementById('closeModal').onclick = function() {
+    document.getElementById('closeModal').onclick = function () {
         document.getElementById('mapModal').style.display = 'none';
     };
 
     // Check if Geolocation is supported
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             var userLocation = {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
@@ -266,7 +266,7 @@ function initMapModal(destinationCoords) {
 
             // Calculate and display the route
             calculateAndDisplayRoute(directionsService, directionsRenderer, userLocation, destinationCoords);
-        }, function() {
+        }, function () {
             handleLocationError(true, map.getCenter());
         });
     } else {
@@ -281,7 +281,7 @@ function calculateAndDisplayRoute(directionsService, directionsRenderer, start, 
         destination: end,
         // Consider allowing the user to select the mode
         travelMode: google.maps.TravelMode.DRIVING,
-    }, function(response, status) {
+    }, function (response, status) {
         if (status === google.maps.DirectionsStatus.OK) {
             directionsRenderer.setDirections(response);
         } else {
@@ -304,7 +304,7 @@ function initializeGoogleMapsAPI() {
             resolve();
             return;
         }
-        
+
         fetchGoogleMapsApiKey().then(apiKey => {
             if (!apiKey) {
                 reject('No API key received.');
@@ -336,6 +336,6 @@ function loadGoogleMapsScript(apiKey) {
 
 
 
-window.onload = function() {
+window.onload = function () {
     initSpeechRecognition();
 };

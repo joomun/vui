@@ -1,424 +1,415 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; /* This ensures padding doesn't affect overall width */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* This ensures padding doesn't affect overall width */
 }
-
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: block; /* Let Bootstrap handle the flex layout */
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: block; /* Let Bootstrap handle the flex layout */
 }
 
-header, footer {
-    background-color: #000000;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-    width: 100%; /* Ensure header and footer are full width */
-
+header,
+footer {
+  background-color: #000000;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  width: 100%; /* Ensure header and footer are full width */
 }
 
 .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-    
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* Sidebar styles */
 nav {
-    background-image: url('/resources/campus.jpg'); /* Add your background image */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    color: white; /* Adjust text color for visibility */
-    padding: 1rem;
-    width: 200px; /* Fixed width for the sidebar */
-    flex-shrink: 0; /* Prevents the sidebar from shrinking */
+  background-image: url("/resources/campus.jpg"); /* Add your background image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white; /* Adjust text color for visibility */
+  padding: 1rem;
+  width: 200px; /* Fixed width for the sidebar */
+  flex-shrink: 0; /* Prevents the sidebar from shrinking */
 }
 .logo {
-    display: block; /* Makes the image a block element */
-    max-width: 100%; /* Ensures the image is not wider than the sidebar */
-    height: auto; /* Keeps the aspect ratio of the image */
-    margin: 0 auto 20px; /* Centers the image and adds some margin below */
+  display: block; /* Makes the image a block element */
+  max-width: 100%; /* Ensures the image is not wider than the sidebar */
+  height: auto; /* Keeps the aspect ratio of the image */
+  margin: 0 auto 20px; /* Centers the image and adds some margin below */
 }
 
 #sidebar {
-    
-    background-color: #f0f0f0; /* Light grey background */
-    min-height: 100vh; /* Full height */
-    padding: 20px; /* Padding around text */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow to the right of sidebar */
-    z-index: 1000; /* Ensure it's above the content */
+  background-color: #f0f0f0; /* Light grey background */
+  min-height: 100vh; /* Full height */
+  padding: 20px; /* Padding around text */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow to the right of sidebar */
+  z-index: 1000; /* Ensure it's above the content */
 }
 
 #sidebar h2 {
-    margin-top: 0; /* Remove default margin */
+  margin-top: 0; /* Remove default margin */
 }
 
 #sidebar ul {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margin */
-    margin-top: 70px;
+  list-style-type: none; /* Remove bullet points */
+  padding: 0; /* Remove default padding */
+  margin: 0; /* Remove default margin */
+  margin-top: 70px;
 }
 
 #sidebar ul li a {
-    display: block; /* Make the links fill their container */
-    padding: 10px; /* Add some padding */
-    text-decoration: none; /* Remove underline from links */
-    background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
-    border-radius: 25px;
-    color: white; /* Text color */
-    align-items: center;
-    margin: 10px;
+  display: block; /* Make the links fill their container */
+  padding: 10px; /* Add some padding */
+  text-decoration: none; /* Remove underline from links */
+  background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
+  border-radius: 25px;
+  color: white; /* Text color */
+  align-items: center;
+  margin: 10px;
 }
 
 #sidebar ul li a:hover {
-    background-color: #ddd; /* Light grey background on hover */
+  background-color: #ddd; /* Light grey background on hover */
 }
-
 
 /* Main content styles */
 main {
-    padding: 20px;
-    display: block; /* Default display for block elements */
-    align-items: center;
-    gap: 20px;
+  padding: 20px;
+  display: block; /* Default display for block elements */
+  align-items: center;
+  gap: 20px;
 }
-
-
 
 #voice-output {
-    margin-top: 20px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    width: 80%;
-    min-height: 50px;
+  margin-top: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 80%;
+  min-height: 50px;
 }
 
-
-
 #mic-button {
-    position: relative;
-    width: 100%;
-    height: 30%;
-    border-radius: 50%;
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    font-size: 36px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    outline: none;
+  position: relative;
+  width: 100%;
+  height: 30%;
+  border-radius: 50%;
+  background-color: #4caf50;
+  border: none;
+  color: white;
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  outline: none;
 }
 
 #mic-button:active #mic-icon {
-    color: darkred;
+  color: darkred;
 }
 
 #mic-button .wave {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0);
-    animation: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0);
+  animation: none;
 }
 
-
 #audioWave {
-    border-radius: 15px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    display: block; /* Remove default inline display */
-    margin: 20px auto; /* Center it horizontally with margin */
-    width: 100%; /* Responsive width */
-    max-width: 300px; /* Maximum size */
-    background-color: transparent
-    color(srgb rgb(0, 0, 0) rgb(0, 255, 0) blue)  ;
+  border-radius: 15px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  display: block; /* Remove default inline display */
+  margin: 20px auto; /* Center it horizontally with margin */
+  width: 100%; /* Responsive width */
+  max-width: 300px; /* Maximum size */
+  background-color: transparent color(srgb rgb(0, 0, 0) rgb(0, 255, 0) blue);
 }
 
 /* Animation for the wave effect */
 @keyframes pulse {
-    from {
-        opacity: 0.8;
-    }
-    to {
-        transform: scale(10);
-        opacity: 0;
-    }
+  from {
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(10);
+    opacity: 0;
+  }
 }
 
 #transcript {
-    margin-top: 20px;
+  margin-top: 20px;
 }
-
-
 
 .row {
-    display: flex;
-    flex-wrap: wrap; /* Allow the contents to wrap as needed */
-    align-items: center; /* Vertically center the contents of the row */
-    min-height: calc(100vh - 30vh); /* Adjust based on the actual height of your header/footer */
+  display: flex;
+  flex-wrap: wrap; /* Allow the contents to wrap as needed */
+  align-items: center; /* Vertically center the contents of the row */
+  min-height: calc(
+    100vh - 30vh
+  ); /* Adjust based on the actual height of your header/footer */
 }
 
-
 @media (max-width: 767px) {
-    .container-fluid {
-        flex-direction: column;
-    }
+  .container-fluid {
+    flex-direction: column;
+  }
 
-    nav {
-        width: 100%; /* Full width sidebar on smaller screens */
-    }
+  nav {
+    width: 100%; /* Full width sidebar on smaller screens */
+  }
 
-    main {
-        width: 100%; /* Full width main content on smaller screens */
-    }
+  main {
+    width: 100%; /* Full width main content on smaller screens */
+  }
 }
 
 .text-center-red {
-    color: red; /* Sets the text color to red */
-    text-align: center; /* Keeps the text centered */
+  color: red; /* Sets the text color to red */
+  text-align: center; /* Keeps the text centered */
 }
 
-
 .social-icons {
-    display: flex;
-    justify-content: center;
-    padding: 10px 0;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
 }
 
 .social-icons a {
-    color: white; /* Change color as needed */
-    padding: 0 10px;
-    font-size: 24px; /* Adjust size as needed */
+  color: white; /* Change color as needed */
+  padding: 0 10px;
+  font-size: 24px; /* Adjust size as needed */
 }
 
 .social-icons a:hover {
-    opacity: 0.7; /* Optional: add hover effect */
+  opacity: 0.7; /* Optional: add hover effect */
 }
 
 main.col-md-8 {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    padding: 20px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 20px;
+  text-align: center;
 }
 
-main.col-md-4{
-    z-index: 1000;
+main.col-md-4 {
+  z-index: 1000;
 }
 
 #video-background {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    min-width: 100%;
-    min-height: 100%;
-    width: auto;
-    height: auto;
-    z-index: -100;
-    background-size: cover;
-    background-color: #000000;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -100;
+  background-size: cover;
+  background-color: #000000;
 }
 
-#transcript-text{
-    align-items: left;
-    color: white;
-    display: inline-block;
+#transcript-text {
+  align-items: left;
+  color: white;
+  display: inline-block;
 }
 
 .btn {
-    align-items: center;
-    font-size: 1.2rem;
-    padding: 1rem 2.5rem;
-    border: none;
-    outline: none;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    background-color: rgb(14, 14, 26);
-    color: rgb(234, 234, 234);
-    font-weight: 700;
-    transition: 0.6s;
-    box-shadow: 0px 0px 60px #1f4c65;
-    -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
-    z-index: 1000;
-  }
-  
-  .btn:active {
-    scale: 0.92;
-  }
-  
-  .btn:hover {
-    background: rgb(2,29,78);
-    background: linear-gradient(270deg, rgba(2, 29, 78, 0.681) 0%, rgba(31, 215, 232, 0.873) 60%);
-    color: rgb(4, 4, 38);
-  }
-  
+  align-items: center;
+  font-size: 1.2rem;
+  padding: 1rem 2.5rem;
+  border: none;
+  outline: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: rgb(14, 14, 26);
+  color: rgb(234, 234, 234);
+  font-weight: 700;
+  transition: 0.6s;
+  box-shadow: 0px 0px 60px #1f4c65;
+  -webkit-box-reflect: below 10px
+    linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+  z-index: 1000;
+}
 
-  .card {
-    width: 89%;
-    height: 100%;
-    background: #ffffff;
-    position: fixed; /* Fixed position */
-    display: flex;
-    place-content: center;
-    place-items: center;
-    overflow: hidden;
-    border-radius: 20px;
+.btn:active {
+  scale: 0.92;
+}
+
+.btn:hover {
+  background: rgb(2, 29, 78);
+  background: linear-gradient(
+    270deg,
+    rgba(2, 29, 78, 0.681) 0%,
+    rgba(31, 215, 232, 0.873) 60%
+  );
+  color: rgb(4, 4, 38);
+}
+
+.card {
+  width: 89%;
+  height: 100%;
+  background: #ffffff;
+  position: fixed; /* Fixed position */
+  display: flex;
+  place-content: center;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.card h2 {
+  z-index: 1;
+  color: white;
+  font-size: 2em;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  width: 100px;
+  background-image: linear-gradient(
+    180deg,
+    rgb(0, 183, 255),
+    rgb(255, 48, 255)
+  );
+  height: 250%;
+  animation: rotBGimg 3s linear infinite;
+  transition: all 0.2s linear;
+}
+
+@keyframes rotBGimg {
+  from {
+    transform: rotate(0deg);
   }
-  
-  .card h2 {
-    z-index: 1;
-    color: white;
-    font-size: 2em;
+
+  to {
+    transform: rotate(360deg);
   }
-  
-  .card::before {
-    content: '';
-    position: absolute;
-    width: 100px;
-    background-image: linear-gradient(180deg, rgb(0, 183, 255), rgb(255, 48, 255));
-    height: 250%;
-    animation: rotBGimg 3s linear infinite;
-    transition: all 0.2s linear;
-  }
-  
-  @keyframes rotBGimg {
-    from {
-      transform: rotate(0deg);
-    }
-  
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  
-  .card::after {
-    content: '';
-    position: absolute;
-    background: #ffffff;
-    inset: 5px;
-    border-radius: 15px;
-  }  
-  /* .card:hover:before {
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  background: #ffffff;
+  inset: 5px;
+  border-radius: 15px;
+}
+/* .card:hover:before {
     background-image: linear-gradient(180deg, rgb(81, 255, 0), purple);
     animation: rotBGimg 3.5s linear infinite;
   } */
-  
-  .voice-assist-container {
-    background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
-    border-radius: 25px;
-    margin: 20px;
-    padding: 20px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    height: 8%;
-    position: fixed; /* Fixed position */
-    bottom: 20px; /* Distance from bottom */
-    
+
+.voice-assist-container {
+  background: linear-gradient(to right, #f000fe, #9738fd, #0e36dd);
+  border-radius: 25px;
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  height: 8%;
+  position: fixed; /* Fixed position */
+  bottom: 20px; /* Distance from bottom */
 }
 
 .voice-assist-footer {
-    display: flex;
-    justify-content: space-between; /* This will push the transcript text to the left and the mic/wave to the right */
-    align-items: center; /* This will center the items vertically */
-    /* Apply any additional styling such as padding or margin as needed */
+  display: flex;
+  justify-content: space-between; /* This will push the transcript text to the left and the mic/wave to the right */
+  align-items: center; /* This will center the items vertically */
+  /* Apply any additional styling such as padding or margin as needed */
 }
 
 .mic-and-wave-container {
-    display: flex;
-    align-items: center; /* This will align the microphone icon and wave vertically */
-    /* You can apply padding or margin between the mic icon and wave here if needed */
+  display: flex;
+  align-items: center; /* This will align the microphone icon and wave vertically */
+  /* You can apply padding or margin between the mic icon and wave here if needed */
 }
 
 .transcript-container {
-    white-space: nowrap; /* Ensure the text stays on a single line */
-    overflow-x: auto; /* Allow horizontal scrolling */
+  white-space: nowrap; /* Ensure the text stays on a single line */
+  overflow-x: auto; /* Allow horizontal scrolling */
 
-    margin-right: 40px; /* Add some space between the text and the microphone icon */
-    padding: 0 5px; /* Optional: Padding inside the container */
-    max-width: 100%; /* Ensure it doesn't overflow the parent container */
+  margin-right: 40px; /* Add some space between the text and the microphone icon */
+  padding: 0 5px; /* Optional: Padding inside the container */
+  max-width: 100%; /* Ensure it doesn't overflow the parent container */
 }
 
 .chat-bubble-container {
-    width: 100%;
-    position: absolute; /* or 'fixed' depending on your layout needs */
-    bottom: 10%; /* Adjust this to position the container above the voice-assist-container */
-    left: 0;
-    padding: 10px;
-    display: flex;
-    margin-left: -5%; /* Add some space from the left edge */
-    margin-right: 5%;
-    margin-bottom: 2%;
-    flex-direction: column; /* Latest messages appear at the bottom */
-    align-items: flex-end; /* Align chat bubbles to the right */
-    background-color: transparent; /* or any color you prefer */
-    z-index: 10; /* Ensure it's above other elements */
-    overflow-y: auto; /* Makes the container scrollable vertically */
-    max-height: 80%; /* Adjust this value based on your layout needs */
+  width: 100%;
+  position: absolute; /* or 'fixed' depending on your layout needs */
+  bottom: 10%; /* Adjust this to position the container above the voice-assist-container */
+  left: 0;
+  padding: 10px;
+  display: flex;
+  margin-left: -5%; /* Add some space from the left edge */
+  margin-right: 5%;
+  margin-bottom: 2%;
+  flex-direction: column; /* Latest messages appear at the bottom */
+  align-items: flex-end; /* Align chat bubbles to the right */
+  background-color: transparent; /* or any color you prefer */
+  z-index: 10; /* Ensure it's above other elements */
+  overflow-y: auto; /* Makes the container scrollable vertically */
+  max-height: 80%; /* Adjust this value based on your layout needs */
 }
-
 
 /* Individual chat bubble styles */
 .chat-bubble {
-
-    border-radius: 15px;
-    padding: 10px 20px;
-    margin: 5px 0;
-    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    color: white;
-    justify-content: space-between; /* Space out the text and icon */
+  border-radius: 15px;
+  padding: 10px 20px;
+  margin: 5px 0;
+  box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: space-between; /* Space out the text and icon */
 }
 
 .user-icon-container {
-    margin-bottom: 5px; /* Space between icon and text */
-    align-self: flex-end;
+  margin-bottom: 5px; /* Space between icon and text */
+  align-self: flex-end;
 }
-
-
 
 /* User icon styles */
 .user-icon {
-    /* Your existing styles */
-    margin-top: 15%;
-    font-size: 18px; /* Adjust size as needed */
-    color:#000000; /* Color of your icon */
+  /* Your existing styles */
+  margin-top: 15%;
+  font-size: 18px; /* Adjust size as needed */
+  color: #000000; /* Color of your icon */
 }
 
 /* User messages */
 .chat-bubble.user {
-    align-self: flex-end; /* Align to the right */
-    background: linear-gradient(to right, #0e36dd, #9738fd, #000000);
-    border-radius: 15px;
-    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    color: white;
-    justify-content: space-between; /* Space out the text and icon */
+  align-self: flex-end; /* Align to the right */
+  background: linear-gradient(to right, #0e36dd, #9738fd, #000000);
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: space-between; /* Space out the text and icon */
 }
 
 /* Bot messages */
 .chat-bubble.bot {
-    align-self: flex-start;
-    margin-left: 22.5%;
-    background: linear-gradient(to right, #000000, #9738fd, #0e36dd);
-    border-radius: 15px;
-    box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    color: white;
-    justify-content: space-between; /* Space out the text and icon */
+  align-self: flex-start;
+  margin-left: 22.5%;
+  background: linear-gradient(to right, #000000, #9738fd, #0e36dd);
+  border-radius: 15px;
+  box-shadow: 0 1px 3px rgba(190, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  color: white;
+  justify-content: space-between; /* Space out the text and icon */
 }
