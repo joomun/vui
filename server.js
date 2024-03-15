@@ -3,10 +3,16 @@ const { OpenAI } = require('openai');
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 const mapapiKey = process.env.GOOGLE_MAPS_API_KEY;
+const calendar = google.calendar({
+    version: 'v3',
+    auth: process.env.GOOGLE_CALENDAR_API_KEY // Use your API key here
+  });
 
+  
 const express = require('express');
 const app = express();
 const path = require('path');
+
 
 // Serve static files from your "vui" directory
 // If server.js is in the root and "vui" is also in the root, the path will be as follows:
@@ -244,7 +250,7 @@ app.get('*', (req, res) => {
 
 
 function isAskingForVirtualTour(transcript) {
-    const keywords = ['virtual tour'];
+    const keywords = ['virtual tour','virtual Campus tour', 'virtual campus' ];
     return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 

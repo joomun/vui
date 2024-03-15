@@ -362,6 +362,7 @@ main.col-md-4 {
   z-index: 10; /* Ensure it's above other elements */
   overflow-y: auto; /* Makes the container scrollable vertically */
   max-height: 80%; /* Adjust this value based on your layout needs */
+  font-size: 16px;
 }
 
 /* Individual chat bubble styles */

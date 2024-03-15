@@ -187,9 +187,8 @@ function initSpeechRecognition() {
     }
 }
 
-window.onload = function () {
-    initSpeechRecognition();
-};
+
+
 
 function showChatBubble(message, sender) {
     var chatBubbleContainer = document.getElementById('chat-bubble-container');
@@ -334,8 +333,26 @@ function loadGoogleMapsScript(apiKey) {
     });
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+    // Add event listener to the "NEW CHAT" button
+    document.getElementById('newChatButton').addEventListener('click', function () {
+        // Clear the chat
+        clearChat();
+
+        // Reload the window
+        window.location.reload();
+    });
+
+    // Function to clear the chat
+    function clearChat() {
+        var chatBubbleContainer = document.getElementById('hat-bubble-container');
+        chatBubbleContainer.innerHTML = ''; // Remove all chat bubbles
+    }
+});
 
 
-window.onload = function () {
+window.onload = function() {
     initSpeechRecognition();
+    showChatBubble('Welcome to the Middlesex University Mauritius Campus Assistant! Here are some features you can try:\n1. Ask about international tuition fees.\n2. Inquire about available courses.\n3. Request information about specific locations on campus.\n4. Take a virtual tour of the campus.\n5. Book an appointment.\n\nFeel free to type your question or inquiry, or click on the microphone icon and speak your query.', 'bot');
+
 };
