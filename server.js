@@ -1,5 +1,6 @@
 require('dotenv').config();
 const { OpenAI } = require('openai');
+const { google } = require('googleapis');
 
 const openai = new OpenAI(process.env.OPENAI_API_KEY);
 const mapapiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -7,12 +8,10 @@ const calendar = google.calendar({
     version: 'v3',
     auth: process.env.GOOGLE_CALENDAR_API_KEY // Use your API key here
   });
-
-  
 const express = require('express');
 const app = express();
 const path = require('path');
-
+const calendarId = "6704c3ba6330761f97d9720b7eb308616b4305cb26409262368929e7b5af70e9@group.calendar.google.com";
 
 // Serve static files from your "vui" directory
 // If server.js is in the root and "vui" is also in the root, the path will be as follows:
@@ -123,6 +122,14 @@ app.post('/api/send_transcript', async (req, res) => {
             res.json({ success: false, message: "I'm sorry, I couldn't find information for that location." });
         }
     }
+    else if (isAskingToScheduleAppointment(userTranscript)) {
+        console.log(userTranscript);
+        res.json({
+            success: true,
+            action: 'requestDateTime', // Correct action to trigger client-side response
+            message: 'Sure, I can help you book an appointment. Please provide me with the date and time.'
+        });
+    }
     else if (isAskingForVirtualTour(userTranscript)) {
         res.json({ success: true, virtualTourUrl: 'https://app.lapentor.com/sphere/mdx-mru-virtual-tour' });
     }
@@ -174,6 +181,60 @@ app.post('/api/send_transcript', async (req, res) => {
         }
     }
 });
+
+const { JWT } = require('google-auth-library');
+
+// Load the service account JSON file
+const serviceAccount = require('./google.json');
+
+app.post('/api/book_appointment', async (req, res) => {
+    const { dateTime } = req.body;
+
+    try {
+        // Initialize the JWT client
+        const jwtClient = new JWT({
+            email: serviceAccount.client_email,
+            key: serviceAccount.private_key,
+            scopes: ['https://www.googleapis.com/auth/calendar'],
+        });
+
+        // Authorize the jwtClient
+        await jwtClient.authorize();
+
+        // Create a calendar object
+        const calendar = google.calendar({ version: 'v3', auth: jwtClient });
+
+        // Define event details
+        const event = {
+            calendarId: 'primary',
+            resource: {
+                summary: 'Appointment',
+                start: { dateTime: dateTime },
+                end: { dateTime: dateTime }
+            }
+        };
+
+        // Insert event into the calendar
+        calendar.events.insert({
+            auth: jwtClient,
+            calendarId: calendarId,
+            resource: event.resource
+        }, (err, event) => {
+            if (err) {
+                console.error('Error booking appointment:', err);
+                res.status(500).json({ success: false, message: 'Failed to book appointment. Please try again.' });
+            } else {
+                console.log('Appointment booked successfully:', event);
+                res.json({ success: true, message: 'Appointment booked successfully!', event: event });
+            }
+        });
+    } catch (error) {
+        console.error('Error booking appointment:', error);
+        res.status(500).json({ success: false, message: 'Failed to book appointment. Please try again.' });
+    }
+});
+
+
 
 function isAskingAboutInternationalFees(transcript) {
     // Simple keyword check
@@ -254,6 +315,10 @@ function isAskingForVirtualTour(transcript) {
     return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 
+function isAskingToScheduleAppointment(transcript) {
+    const schedulingKeywords = ['book an appointment', 'schedule an appointment', 'want to meet'];
+    return schedulingKeywords.some(keyword => transcript.toLowerCase().includes(keyword));
+}
 
 // Start the server
 const PORT = process.env.PORT || 3000;

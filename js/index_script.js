@@ -106,7 +106,10 @@ function sendTranscriptToServer(transcript) {
                         const destinationCoords = { lat: data.location.Coordinates.lat, lng: data.location.Coordinates.lng };
                         initMapModal(destinationCoords);
                     });
-                } else {
+                } else if (data.action === 'requestDateTime') 
+                {requestDateTime();}
+                
+                else {
                     if (data.reply && data.reply.trim() !== '') {
                         // Speak the bot's response
                         speak(data.reply);
@@ -117,6 +120,7 @@ function sendTranscriptToServer(transcript) {
                 showChatBubble(data.message, 'bot'); // Error message or location not found
             }
         })
+
         .catch((error) => {
             console.error('API call error:', error);
             showChatBubble('There was an error processing your request.', 'bot');
@@ -138,10 +142,6 @@ function speak(message, voiceName) {
     // Speak the message
     speechSynthesis.speak(utterance);
 }
-
-
-
-
 
 function initSpeechRecognition() {
     if (window.webkitSpeechRecognition) {
@@ -186,9 +186,6 @@ function initSpeechRecognition() {
         alert('Your browser does not support the Web Speech API. Please use Google Chrome for this feature.');
     }
 }
-
-
-
 
 function showChatBubble(message, sender) {
     var chatBubbleContainer = document.getElementById('chat-bubble-container');
@@ -349,6 +346,65 @@ document.addEventListener('DOMContentLoaded', function () {
         chatBubbleContainer.innerHTML = ''; // Remove all chat bubbles
     }
 });
+
+
+
+// Function to request appointment date and time from the user
+function requestDateTime() {
+    console.log('Requesting date and time for appointment')
+    var chatBubbleContainer = document.getElementById('chat-bubble-container');
+    var inputBubble = document.createElement('div');
+    inputBubble.classList.add('chat-bubble', 'bot');
+    inputBubble.innerHTML = `
+        <p>Please enter the date and time you want to book:</p>
+        <input type="date" id="bookingDate" required>
+        <input type="time" id="bookingTime" required>
+        <button onclick="submitAppointmentRequest()">Submit</button>
+    `;
+    chatBubbleContainer.appendChild(inputBubble);
+    inputBubble.scrollIntoView({ behavior: 'smooth' });
+}
+
+
+function submitAppointmentRequest() {
+    const date = document.getElementById("bookingDate").value;
+    const time = document.getElementById("bookingTime").value;
+    const dateTime = `${date} ${time}`;
+
+    // Call function to book appointment on Google Calendar
+    bookAppointmentOnGoogleCalendar(dateTime)
+        .then(() => {
+            // Appointment booked successfully
+            showChatBubble('Appointment booked successfully!', 'bot');
+        })
+        .catch(error => {
+            console.error('Error booking appointment:', error);
+            // Show error message to the user
+            showChatBubble('Failed to book appointment. Please try again.', 'bot');
+        });
+}
+
+function bookAppointmentOnGoogleCalendar(dateTime) {
+    // Implement logic to make API call to book appointment on Google Calendar
+    // Example:
+    return fetch('/api/book_appointment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ dateTime: dateTime }),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to book appointment on Google Calendar');
+        }
+        return response.json();
+    });
+}
+
+
+
+
 
 
 window.onload = function() {
