@@ -369,46 +369,99 @@ function requestDateTime() {
 function submitAppointmentRequest() {
     const date = document.getElementById("bookingDate").value;
     const time = document.getElementById("bookingTime").value;
-    const dateTime = `${date} ${time}`;
 
-    // Call function to book appointment on Google Calendar
-    bookAppointmentOnGoogleCalendar(dateTime)
-        .then(() => {
+    // Check if date or time inputs are empty
+    if (!date || !time) {
+        showChatBubble('Please make sure to fill out both the date and time fields.', 'bot');
+        return;
+    }
+
+    // Create a JavaScript Date object from date and time inputs
+    const appointmentStart = new Date(`${date}T${time}`);
+    
+    // Assuming a 1-hour appointment for the example
+    const appointmentEnd = new Date(appointmentStart.getTime() + 60 * 60 * 1000);
+
+    // Convert dates to RFC3339 timestamp format for the API
+    const startDateTime = appointmentStart.toISOString();
+    const endDateTime = appointmentEnd.toISOString();
+
+    // Call the API to book the appointment with the correct start and end time
+    bookAppointmentOnGoogleCalendar(startDateTime, endDateTime)
+        .then(response => {
             // Appointment booked successfully
-            showChatBubble('Appointment booked successfully!', 'bot');
+            if(response.success) {
+                showChatBubble('Appointment booked successfully!', 'bot');
+            } else {
+                // Handle any messages from the server-side like validation errors
+                showChatBubble(response.message, 'bot');
+            }
         })
         .catch(error => {
             console.error('Error booking appointment:', error);
-            // Show error message to the user
             showChatBubble('Failed to book appointment. Please try again.', 'bot');
         });
 }
 
-function bookAppointmentOnGoogleCalendar(dateTime) {
-    // Implement logic to make API call to book appointment on Google Calendar
-    // Example:
+
+function bookAppointmentOnGoogleCalendar(startDateTime, endDateTime) {
+    // Send the startDateTime and endDateTime to the server using fetch API or another HTTP client
     return fetch('/api/book_appointment', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ dateTime: dateTime }),
+        body: JSON.stringify({ startDateTime, endDateTime }),
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Failed to book appointment on Google Calendar');
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.message || 'Failed to book appointment on Google Calendar');
         }
-        return response.json();
+        return data;
     });
 }
 
 
+function initTextInputForTranscript() {
+    const inputContainer = document.createElement('div');
+    inputContainer.id = 'text-input-container';
+    inputContainer.innerHTML = `
+        <input type="text" id="manual-transcript-input" placeholder="Type your message here..." />
+        <button id="submit-manual-transcript">Submit</button>
+    `;
+    document.body.appendChild(inputContainer); // Append to body or a specific element where you want this to appear
+
+    document.getElementById('submit-manual-transcript').addEventListener('click', function() {
+        const userInput = document.getElementById('manual-transcript-input').value;
+        if (userInput.trim() !== '') {
+            processManualTranscript(userInput);
+        }
+    });
+}
+
+function processManualTranscript(transcript) {
+    // Show user's input as a chat bubble attributed to the user
+    showChatBubble(transcript, 'user');
+
+    // Then, send the transcript to the server for processing
+    sendTranscriptToServer(transcript);
+
+    // Optionally, clear the input field after sending
+    document.getElementById('manual-transcript-input').value = '';
+}
 
 
 
 
 window.onload = function() {
     initSpeechRecognition();
-    showChatBubble('Welcome to the Middlesex University Mauritius Campus Assistant! Here are some features you can try:\n1. Ask about international tuition fees.\n2. Inquire about available courses.\n3. Request information about specific locations on campus.\n4. Take a virtual tour of the campus.\n5. Book an appointment.\n\nFeel free to type your question or inquiry, or click on the microphone icon and speak your query.', 'bot');
+    initTextInputForTranscript();
 
+    // Show the initial welcome message from MDX CHATBOT
+    const initialMessage = document.getElementById('transcript-text').textContent || 'Hello. I am MDX CHATBOT. How can I assist you?';
+    showChatBubble(initialMessage, 'bot');
+
+    // Show additional welcome message with features you can try
+    showChatBubble('Welcome to the Middlesex University Mauritius Campus Assistant! Here are some features you can try:\n1. Ask about international tuition fees.\n2. Inquire about available courses.\n3. Request information about specific locations on campus.\n4. Take a virtual tour of the campus.\n5. Book an appointment.\n\nFeel free to type your question or inquiry, or click on the microphone icon and speak your query.', 'bot');
 };

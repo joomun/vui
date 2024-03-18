@@ -12,7 +12,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const calendarId = "6704c3ba6330761f97d9720b7eb308616b4305cb26409262368929e7b5af70e9@group.calendar.google.com";
-
+const bodyParser = require('body-parser');
 // Serve static files from your "vui" directory
 // If server.js is in the root and "vui" is also in the root, the path will be as follows:
 app.use(express.static(path.join(__dirname, 'vui')));
@@ -187,17 +187,21 @@ const { JWT } = require('google-auth-library');
 // Load the service account JSON file
 const serviceAccount = require('./google.json');
 
+
+const jwtClient = new JWT({
+    email: serviceAccount.client_email,
+    key: serviceAccount.private_key,
+    scopes: ['https://www.googleapis.com/auth/calendar'],
+});
+
+// Body parser middleware to handle JSON payloads
+app.use(bodyParser.json());
+
+// POST route to book an appointment
 app.post('/api/book_appointment', async (req, res) => {
-    const { dateTime } = req.body;
+    const { startDateTime, endDateTime } = req.body;
 
     try {
-        // Initialize the JWT client
-        const jwtClient = new JWT({
-            email: serviceAccount.client_email,
-            key: serviceAccount.private_key,
-            scopes: ['https://www.googleapis.com/auth/calendar'],
-        });
-
         // Authorize the jwtClient
         await jwtClient.authorize();
 
@@ -206,33 +210,25 @@ app.post('/api/book_appointment', async (req, res) => {
 
         // Define event details
         const event = {
-            calendarId: 'primary',
+            calendarId: calendarId,
             resource: {
                 summary: 'Appointment',
-                start: { dateTime: dateTime },
-                end: { dateTime: dateTime }
-            }
+                start: { dateTime: startDateTime },
+                end: { dateTime: endDateTime },
+            },
         };
 
         // Insert event into the calendar
-        calendar.events.insert({
-            auth: jwtClient,
-            calendarId: calendarId,
-            resource: event.resource
-        }, (err, event) => {
-            if (err) {
-                console.error('Error booking appointment:', err);
-                res.status(500).json({ success: false, message: 'Failed to book appointment. Please try again.' });
-            } else {
-                console.log('Appointment booked successfully:', event);
-                res.json({ success: true, message: 'Appointment booked successfully!', event: event });
-            }
-        });
+        const response = await calendar.events.insert(event);
+
+        console.log('Appointment booked successfully:', response.data);
+        res.json({ success: true, message: 'Appointment booked successfully!', event: response.data });
     } catch (error) {
         console.error('Error booking appointment:', error);
-        res.status(500).json({ success: false, message: 'Failed to book appointment. Please try again.' });
+        res.status(500).json({ success: false, message: 'Failed to book appointment. Please try again.', details: error.message });
     }
 });
+
 
 
 
