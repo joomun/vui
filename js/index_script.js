@@ -370,38 +370,49 @@ function submitAppointmentRequest() {
     const date = document.getElementById("bookingDate").value;
     const time = document.getElementById("bookingTime").value;
 
-    // Check if date or time inputs are empty
     if (!date || !time) {
-        showChatBubble('Please make sure to fill out both the date and time fields.', 'bot');
+        Swal.fire({ // Using SweetAlert for error display
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Please make sure to fill out both the date and time fields.'
+        });
         return;
     }
 
-    // Create a JavaScript Date object from date and time inputs
     const appointmentStart = new Date(`${date}T${time}`);
-    
-    // Assuming a 1-hour appointment for the example
-    const appointmentEnd = new Date(appointmentStart.getTime() + 60 * 60 * 1000);
-
-    // Convert dates to RFC3339 timestamp format for the API
+    const appointmentEnd = new Date(appointmentStart.getTime() + 60 * 60 * 1000); // 1 hour duration
     const startDateTime = appointmentStart.toISOString();
     const endDateTime = appointmentEnd.toISOString();
 
-    // Call the API to book the appointment with the correct start and end time
     bookAppointmentOnGoogleCalendar(startDateTime, endDateTime)
         .then(response => {
-            // Appointment booked successfully
-            if(response.success) {
+            if (response.success) {
+                Swal.fire({ // Success alert
+                    icon: 'success',
+                    title: 'Your appointment has been booked!',
+                    showConfirmButton: false,
+                    timer: 1500 // Alert will close after 1.5 seconds
+                });
                 showChatBubble('Appointment booked successfully!', 'bot');
             } else {
-                // Handle any messages from the server-side like validation errors
-                showChatBubble(response.message, 'bot');
+                Swal.fire({ // Error alert from server response
+                    icon: 'error',
+                    title: 'Failed to book appointment',
+                    text: response.message
+                });
             }
         })
         .catch(error => {
             console.error('Error booking appointment:', error);
+            Swal.fire({ // Error alert for catch block
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Failed to book appointment. Please try again.'
+            });
             showChatBubble('Failed to book appointment. Please try again.', 'bot');
         });
 }
+
 
 
 function bookAppointmentOnGoogleCalendar(startDateTime, endDateTime) {

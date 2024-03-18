@@ -312,7 +312,7 @@ function isAskingForVirtualTour(transcript) {
 }
 
 function isAskingToScheduleAppointment(transcript) {
-    const schedulingKeywords = ['book an appointment', 'schedule an appointment', 'want to meet'];
+    const schedulingKeywords = ['book an appointment', 'schedule an appointment', 'want to meet','want an appointment'];
     return schedulingKeywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 
