@@ -307,7 +307,7 @@ app.get('*', (req, res) => {
 
 
 function isAskingForVirtualTour(transcript) {
-    const keywords = ['virtual tour','virtual Campus tour', 'virtual campus' ];
+    const keywords = ['virtual tour','virtual Campus tour', 'virtual campus' , 'physical meeting'];
     return keywords.some(keyword => transcript.toLowerCase().includes(keyword));
 }
 

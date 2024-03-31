@@ -347,7 +347,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.getElementById('newChatButton').addEventListener('click', function () {
+    // Clear all existing chat bubbles
+    const chatBubbleContainer = document.getElementById('chat-bubble-container');
+    chatBubbleContainer.innerHTML = '';
 
+    // Show the welcome message in a new chat bubble
+    const welcomeMessage = 'Welcome to the Middlesex University Mauritius Campus Assistant! Here are some features you can try:\n1. Ask about international tuition fees.\n2. Inquire about available courses.\n3. Request information about specific locations on campus.\n4. Take a virtual tour of the campus.\n5. Book an appointment.\n\nFeel free to type your question or inquiry, or click on the microphone icon and speak your query.';
+    showChatBubble(welcomeMessage, 'bot');
+});
 
 // Function to request appointment date and time from the user
 function requestDateTime() {
@@ -467,8 +475,6 @@ function processManualTranscript(transcript) {
 
 window.onload = function() {
     initSpeechRecognition();
-    initTextInputForTranscript();
-
     // Show the initial welcome message from MDX CHATBOT
     const initialMessage = document.getElementById('transcript-text').textContent || 'Hello. I am MDX CHATBOT. How can I assist you?';
     showChatBubble(initialMessage, 'bot');
