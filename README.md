@@ -10,7 +10,7 @@ The Middlesex University Mauritius Campus Assistant is an AI-powered chatbot des
   - [Step-by-Step Guide to Adding API Keys](#step-by-step-guide-to-adding-api-keys)
 - [Usage](#usage)
 - [Contributing](#contributing)
-
+- [Screenshots](#Screenshots)
 ## Introduction
 
 The Middlesex University Mauritius Campus Assistant is an innovative AI-driven tool that serves as a virtual guide and helper for students and visitors of the Middlesex University Mauritius Campus. Through voice commands, users can easily navigate campus services, find course information, and much more.
@@ -22,6 +22,23 @@ The Middlesex University Mauritius Campus Assistant is an innovative AI-driven t
 - **Course and Fees Information**: Access up-to-date information about courses, including tuition fees and other related costs.
 - **Virtual Campus Tour**: Explore the campus virtually with a guided tour, accessible through the assistant.
 - **Integrated APIs**: Utilizes Google Maps for navigation, Google Calendar for scheduling, and OpenAI for dynamic responses to queries.
+
+## Screenshots
+
+Here are some screenshots demonstrating key features of the Middlesex University Mauritius Campus Assistant:
+
+### Campus Navigation
+![Campus Navigation](resources/screenshot/MAPS.png "Campus Navigation")
+This screenshot demonstrates the assistant's ability to guide users through the campus with interactive maps.
+
+### Appointment Scheduling
+![Appointment Scheduling](resources/screenshot/Appointment%20booking.png "Appointment Booking")
+This feature allows users to schedule appointments with university staff through the assistant.
+
+### International Fees Information
+![International Fees Information](resources/screenshot/General%20Chat.png "General Chat")
+This screenshot shows how the assistant provides information on international tuition fees.
+
 
 ## Installation
 
